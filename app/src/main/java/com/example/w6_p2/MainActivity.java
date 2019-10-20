@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String DB_INIT = "DB_INIT";
     private Button btnChangeImg1;
     private Button btnChangeImg2;
     private ImageView imgView;
@@ -38,6 +40,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
+        imgIndex = sharedPref.getInt("imgIndex", 0);
+        // Drawable img = getResources().getDrawable(sharedPref.getInt("image", 0), getTheme());
+        // imgView.setImageDrawable(img);
+        // Toast.makeText(this, getString(R.string.app_name), Toast.LENGTH_LONG).show();
 
         btnChangeImg1 = findViewById(R.id.btnChangeImg1);
         btnChangeImg2 = findViewById(R.id.btnChangeImg2);
@@ -60,12 +68,14 @@ public class MainActivity extends AppCompatActivity {
                 if (imgIndex == 3) {
                     imgView.setVisibility(View.VISIBLE);
                     imgView.setImageResource(imgNames.get(imgIndex));
+                    imgView.setTag(imgNames.get(imgIndex));
                     imgCaption.setVisibility(View.VISIBLE);
                     imgCaption.setText(imgAndCaptions.get(imgIndex));
                     imgIndex = 0;
                 } else {
                     imgView.setVisibility(View.VISIBLE);
                     imgView.setImageResource(imgNames.get(imgIndex));
+                    imgView.setTag(imgNames.get(imgIndex));
                     imgCaption.setVisibility(View.VISIBLE);
                     imgCaption.setText(imgAndCaptions.get(imgIndex));
                     imgIndex++;
@@ -80,12 +90,14 @@ public class MainActivity extends AppCompatActivity {
                 if (imgIndex == 3) {
                     imgView.setVisibility(View.VISIBLE);
                     imgView.setImageResource(imgNames.get(imgIndex));
+                    imgView.setTag(imgNames.get(imgIndex));
                     imgCaption.setVisibility(View.VISIBLE);
                     imgCaption.setText(imgAndCaptions.get(imgIndex));
                     imgIndex = 0;
                 } else {
                     imgView.setVisibility(View.VISIBLE);
                     imgView.setImageResource(imgNames.get(imgIndex));
+                    imgView.setTag(imgNames.get(imgIndex));
                     imgCaption.setVisibility(View.VISIBLE);
                     imgCaption.setText(imgAndCaptions.get(imgIndex));
                     imgIndex++;
@@ -95,7 +107,19 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-//    // A method to encode the image before it can be saved to the sharedpreferences
+    @Override
+    protected void onDestroy() {
+        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt("imgIndex", imgIndex);
+        int drawableId = Integer.parseInt(imgView.getTag().toString());
+        editor.putInt("image", drawableId);
+        editor.commit();
+
+        super.onDestroy();
+    }
+
+    //    // A method to encode the image before it can be saved to the sharedpreferences
 //
 //    public static String encodeTobase64(Bitmap image) {
 //        Bitmap immage = image;
