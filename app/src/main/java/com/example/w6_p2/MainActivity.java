@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
                 if (imgIndex == 3) {
                     imgView.setVisibility(View.VISIBLE);
                     imgView.setImageResource(imgNames.get(imgIndex));
-                    imgView.setTag(imgNames.get(imgIndex));
+                    imgView.setTag(imgNames.get(imgIndex));                    // added the tag, which might be the way to save the state of an image but it does not work yet.
                     imgCaption.setVisibility(View.VISIBLE);
                     imgCaption.setText(imgAndCaptions.get(imgIndex));
                     imgIndex = 0;
