@@ -27,7 +27,8 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String DB_INIT = "DB_INIT";
+    // private static final String DB_INIT = "DB_INIT";
+    SharedPreferences sharedPref;
     private Button btnChangeImg1;
     private Button btnChangeImg2;
     private ImageView imgView;
@@ -40,12 +41,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
-        imgIndex = sharedPref.getInt("imgIndex", 0);
-        // Drawable img = getResources().getDrawable(sharedPref.getInt("image", 0), getTheme());
-        // imgView.setImageDrawable(img);
-        // Toast.makeText(this, getString(R.string.app_name), Toast.LENGTH_LONG).show();
 
         btnChangeImg1 = findViewById(R.id.btnChangeImg1);
         btnChangeImg2 = findViewById(R.id.btnChangeImg2);
@@ -61,6 +56,19 @@ public class MainActivity extends AppCompatActivity {
        imgAndCaptions.put(1, "I'm a pug!");
        imgAndCaptions.put(2, "I'm Rhett!!");
        imgAndCaptions.put(3, "I'm a shih tzu!");
+
+        sharedPref = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
+        if (sharedPref.contains("imgIndex")) {
+            imgIndex = sharedPref.getInt("imgIndex", 0);
+        }
+
+        if (sharedPref.contains("image")) {
+            imgView.setVisibility(View.VISIBLE);
+            imgView.setImageResource(sharedPref.getInt("image", 0));
+        }
+        // Drawable img = getResources().getDrawable(sharedPref.getInt("image", 0), getTheme());
+        // imgView.setImageDrawable(img);
+        // Toast.makeText(this, getString(R.string.app_name), Toast.LENGTH_LONG).show();
 
         btnChangeImg1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
                     imgCaption.setText(imgAndCaptions.get(imgIndex));
                     imgIndex++;
                 }
+                Toast.makeText(MainActivity.this, imgView.getTag().toString(), Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -109,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
+        sharedPref = getApplicationContext().getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putInt("imgIndex", imgIndex);
         int drawableId = Integer.parseInt(imgView.getTag().toString());
