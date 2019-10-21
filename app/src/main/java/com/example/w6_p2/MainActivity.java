@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
                     imgCaption.setText(imgAndCaptions.get(imgIndex));
                     imgIndex++;
                 }
-                Toast.makeText(MainActivity.this, imgView.getTag().toString(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(MainActivity.this, imgView.getTag().toString(), Toast.LENGTH_SHORT).show();
 
             }
         });
